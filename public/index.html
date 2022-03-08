@@ -171,6 +171,7 @@
       <p id="oneTime"></p>
       
     </div>
+    <input type="button" value="Make This My Current Task" id="currentTaskButton" style="background: rgb(216, 11, 11)"/>
     <input type="button" value="Delete" id="delete" style="background: rgb(216, 11, 11)"/>
     
   
@@ -206,7 +207,7 @@
     <div data-role="content" data-theme='a'>
 
       <div class="Roboto">
-        <h2>You are not tracking any tasks</h2>
+        <h2 id="currentTaskLabel">You are not tracking any tasks</h2>
         <h2>00:00:00</h2>
       </div>
 
@@ -243,7 +244,7 @@
     <!--   page content -->
     <div data-role="content" data-theme='a'>
       <div class="Roboto"><h2>Here is a record of your tasks</h></div>
-      <div id="divTaskListSubset"></div>
+      <div id="divRecordsList"></div>
       <input type="button" value="Sort by task" id="buttonSubsetComedy" data-inline="true" />
       <input type="button" value="Sort by date" id="buttonSubsetDrama" data-inline="true" />
     </div>

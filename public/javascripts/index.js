@@ -8,6 +8,9 @@ let TaskObject = function (taskName, taskEstimatedTime) {
     this.taskEstimatedTime= taskEstimatedTime;
 }
 
+//create an array to contain records of past tasks
+let RecordsArray= [];
+
 
 /*TaskArray.push(new TaskObject("Do the laundry", 20));*/
 
@@ -46,6 +49,12 @@ document.getElementById("buttonAdd").addEventListener("click", function () {
     $(document).bind("change", "#select-genre", function (event, ui) {
         selectedGenre = $('#select-genre').val();
     });
+    
+    document.getElementById("currentTaskButton").addEventListener("click", function () {
+        let localParm = localStorage.getItem('parm');  // get the unique key back from the dictionairy
+        MakeCurrentTask(localParm);
+        document.location.href = "index.html#currenttask";  // go back to movie list 
+    });
 
     document.getElementById("delete").addEventListener("click", function () {
         let localParm = localStorage.getItem('parm');  // get the unique key back from the dictionairy
@@ -53,6 +62,14 @@ document.getElementById("buttonAdd").addEventListener("click", function () {
         createList();  // recreate li list after removing one
         document.location.href = "index.html#tasks";  // go back to movie list 
     });
+
+//Timer Controls
+
+    document.getElementById("stop").addEventListener("click", function () {
+        let localParm = localStorage.getItem('parm');  // get the unique key back from the dictionairy
+        StopTask(localParm);
+        document.location.href = "index.html#history";  // go back to movie list 
+});
 
 // 2 sort button event methods
     document.getElementById("buttonSortTime").addEventListener("click", function () {
@@ -158,7 +175,27 @@ function createList() {
     });
 
 };
- 
+
+function createRecordsList() {
+    // clear prior data
+    var divRecordsList = document.getElementById("divRecordsList");
+    while (divRecordsList.firstChild) {    // remove any old data so don't get duplicates
+        divRecordsList.removeChild(divRecordsList.firstChild);
+    };
+    var ul = document.createElement('ul');
+    RecordsArray.forEach(function (element,) {   // use handy array forEach method
+        var li = document.createElement('li');
+        // adding a class name to each one as a way of creating a collection
+        li.classList.add('oneRecord'); 
+        // use the html5 "data-parm" to encode the ID of this particular data object
+        // that we are building an li from
+        li.setAttribute("data-parm", element.ID);
+        li.innerHTML = element.ID + ":  " + element.taskName + "  " + element.taskEstimatedTime;
+        ul.appendChild(li);
+    });
+    divRecordsList.appendChild(ul)
+}
+
 
 function createListSubset(whichType) {
     // clear prior data
@@ -203,11 +240,27 @@ function createListSubset(whichType) {
  
 };
 
+//set a task to be the current task
+function MakeCurrentTask(which){
+    console.log(which);
+    let arrayPointer = GetArrayPointer(which);
+    document.getElementById("currentTaskLabel").innerHTML = TaskArray[arrayPointer].taskName;
+}
+
 // remove a movie from array
 function deleteTask(which) {
     console.log(which);
     let arrayPointer = GetArrayPointer(which);
     TaskArray.splice(arrayPointer, 1);  // remove 1 element at index 
+}
+
+//currently this only sends the current task to the task records
+function StopTask(which){
+    console.log(which);
+    let arrayPointer = GetArrayPointer(which);
+    RecordsArray.push(TaskArray[arrayPointer]);
+    console.log(RecordsArray);
+    createRecordsList()
 }
 
 // cycles thru the array to find the array element with a matching ID
