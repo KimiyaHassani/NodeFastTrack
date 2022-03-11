@@ -13,13 +13,9 @@ let TaskObject = function (taskName, taskEstimatedTime) {
     this.taskEstimatedTime= taskEstimatedTime;
 }
 
-TaskArray.push(new TaskObject("Do Homework", 20));
-TaskArray.push(new TaskObject("Feed the cat", 60));
-TaskArray.push(new TaskObject("Clean the kitchen", 25));
-
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  loadFile();
   res.render('index', { title: 'Express' });
 });
 
@@ -35,6 +31,7 @@ router.post('/AddTask', function(req, res) {
   const newTask = req.body;  // get the object from the req object sent from browser
   console.log(newTask);
   
+  loadFile();
   TaskArray.push(newTask);  // add it to our "DB"  (array)
   saveToFile();
   // prepare a reply to the browser
