@@ -34,8 +34,9 @@ router.get('/getAllTasks', function(req, res) {
 router.post('/AddTask', function(req, res) {
   const newTask = req.body;  // get the object from the req object sent from browser
   console.log(newTask);
-  saveToFile();
+  
   TaskArray.push(newTask);  // add it to our "DB"  (array)
+  saveToFile();
   // prepare a reply to the browser
   var response = {
     status  : 200,
@@ -51,19 +52,20 @@ function saveToFile(){
     else {
       console.log("File written successfully\n");
       console.log("The written has the following contents:");
-      console.log(fs.readFileSync("books.txt", "utf8"));
+      console.log(fs.readFileSync("TaskData.txt", "utf8"));
     }
   });
 }
 
 function loadFile(){
-  data = fs.readFile("TaskData.txt", (err) => {
+  let data = fs.readFile("TaskData.txt", (err) => {
     if (err)
       console.log(err);
     else {
       console.log("File read successfully\n");
       console.log("The read has the following contents:");
-      console.log(fs.readFileSync("books.txt", "utf8"));
+      console.log(fs.readFileSync("TaskData.txt", "utf8"));
+      TaskArray = JSON.parse(fs.readFileSync("TaskData.txt", "utf8"));
     }
   });
 
