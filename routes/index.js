@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+const fs = require('fs')
+
 // start by creating data so we don't have to type it in each time
 let TaskArray = [];
 
@@ -24,6 +26,7 @@ router.get('/', function(req, res, next) {
 /* GET all Movie data */
 router.get('/getAllTasks', function(req, res) {
   console.log(TaskArray);
+  loadFile();
   res.json(JSON.stringify(TaskArray));
 });
 
@@ -31,6 +34,7 @@ router.get('/getAllTasks', function(req, res) {
 router.post('/AddTask', function(req, res) {
   const newTask = req.body;  // get the object from the req object sent from browser
   console.log(newTask);
+  saveToFile();
   TaskArray.push(newTask);  // add it to our "DB"  (array)
   // prepare a reply to the browser
   var response = {
@@ -39,5 +43,31 @@ router.post('/AddTask', function(req, res) {
   }
   res.json(JSON.stringify(TaskArray)); // send reply
 });
+
+function saveToFile(){
+  fs.writeFile("TaskData.txt", JSON.stringify(TaskArray), (err) => {
+    if (err)
+      console.log(err);
+    else {
+      console.log("File written successfully\n");
+      console.log("The written has the following contents:");
+      console.log(fs.readFileSync("books.txt", "utf8"));
+    }
+  });
+}
+
+function loadFile(){
+  data = fs.readFile("TaskData.txt", (err) => {
+    if (err)
+      console.log(err);
+    else {
+      console.log("File read successfully\n");
+      console.log("The read has the following contents:");
+      console.log(fs.readFileSync("books.txt", "utf8"));
+    }
+  });
+
+  console.log(data);
+}
 
 module.exports = router;

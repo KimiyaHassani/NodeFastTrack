@@ -73,11 +73,23 @@ document.getElementById("buttonAdd").addEventListener("click", function () {
 
 //Timer Controls
 
+    document.getElementById("start").addEventListener("click", function () {
+    let localParm = localStorage.getItem('parm');  // get the unique key back from the dictionairy
+    StartTask(localParm);
+    });
+
+    document.getElementById("pause").addEventListener("click", function () {
+        let localParm = localStorage.getItem('parm');  // get the unique key back from the dictionairy
+        PauseTask(localParm);
+        });
+
     document.getElementById("stop").addEventListener("click", function () {
         let localParm = localStorage.getItem('parm');  // get the unique key back from the dictionairy
-        StopTask(localParm);
+        StopTask(localParm, document.getElementById('stopwatch').innerHTML);
+        PauseTask(localParm);
+        resetTimer();
         document.location.href = "index.html#history";  // go back to movie list 
-});
+    });
 
 // 2 sort button event methods
     document.getElementById("buttonSortTime").addEventListener("click", function () {
@@ -98,8 +110,8 @@ document.getElementById("buttonAdd").addEventListener("click", function () {
         createRecordsList();  //createList();
         document.location.href = "index.html#history";
     });
-    document.getElementById("buttonSortTime1").addEventListener("click", function () {
-        RecordsArray.sort((a,b) => a["taskEstimatedTime"] - b["taskEstimatedTime"]);
+    document.getElementById("buttonSortCompleteTime").addEventListener("click", function () {
+        RecordsArray.sort((a,b) => a["taskTotalTime"] - b["taskTotalTime"]);
         createRecordsList();
         document.location.href = "index.html#history";
     });
@@ -171,7 +183,7 @@ function createList() {
         // use the html5 "data-parm" to encode the ID of this particular data object
         // that we are building an li from
         li.setAttribute("data-parm", element.ID);
-        li.innerHTML = element.ID + ":  " + element.taskName + "  " + element.taskEstimatedTime;
+        li.innerHTML = element.taskName + "  " + element.taskEstimatedTime;
         ul.appendChild(li);
     });
     divTaskList.appendChild(ul)
@@ -211,7 +223,7 @@ function createRecordsList() {
         // use the html5 "data-parm" to encode the ID of this particular data object
         // that we are building an li from
         li.setAttribute("data-parm", element.ID);
-        li.innerHTML = element.ID + ":  " + element.taskName + "  " + element.taskEstimatedTime;
+        li.innerHTML = element.taskName + "  " + element.taskEstimatedTime+ "  " + element.taskCompleteTime;
         ul.appendChild(li);
     });
     divRecordsList.appendChild(ul)
@@ -234,7 +246,7 @@ function createListSubset(whichType) {
             // use the html5 "data-parm" to encode the ID of this particular data object
             // that we are building an li from
             li.setAttribute("data-parm", element.ID);
-            li.innerHTML = element.ID + ":  " + element.taskName + "  " + element.taskEstimatedTime;
+            li.innerHTML = element.taskName + "  " + element.taskEstimatedTime;
             ul.appendChild(li);
         }
     });
@@ -276,10 +288,14 @@ function deleteTask(which) {
 }
 
 //currently this only sends the current task to the task records
-function StopTask(which){
+function StopTask(which, taskCompleteTime){
     console.log(which);
     let arrayPointer = GetArrayPointer(which);
-    RecordsArray.push(TaskArray[arrayPointer]);
+    let CurrentTask = TaskArray[arrayPointer];
+    let timeArray = taskCompleteTime.split(':');
+    let taskTotalTime = timeArray[0] * 3600 + timeArray[1] * 60 + timeArray[2];
+    let TaskRecord = {ID: CurrentTask.ID, taskName: CurrentTask.taskName, taskEstimatedTime: CurrentTask.taskEstimatedTime, taskCompleteTime: taskCompleteTime, taskTotalTime: taskTotalTime};
+    RecordsArray.push(TaskRecord); 
     console.log(RecordsArray);
     createRecordsList()
 }
@@ -316,4 +332,64 @@ function dynamicSort(property) {
             return a[property].localeCompare(b[property]);
         }
     }
+}
+
+//Timer Controls
+
+var hr = 0;
+var min = 0;
+var sec = 0;
+var stoptime = true;
+
+function StartTask() {
+  if (stoptime == true) {
+        stoptime = false;
+        timerCycle();
+    }
+}
+function PauseTask() {
+  if (stoptime == false) {
+    stoptime = true;
+  }
+}
+
+function timerCycle() {
+    if (stoptime == false) {
+    sec = parseInt(sec);
+    min = parseInt(min);
+    hr = parseInt(hr);
+
+    sec = sec + 1;
+
+    if (sec == 60) {
+      min = min + 1;
+      sec = 0;
+    }
+    if (min == 60) {
+      hr = hr + 1;
+      min = 0;
+      sec = 0;
+    }
+
+    if (sec < 10 || sec == 0) {
+      sec = '0' + sec;
+    }
+    if (min < 10 || min == 0) {
+      min = '0' + min;
+    }
+    if (hr < 10 || hr == 0) {
+      hr = '0' + hr;
+    }
+
+    document.getElementById('stopwatch').innerHTML = hr + ':' + min + ':' + sec;
+
+    setTimeout("timerCycle()", 1000);
+  }
+}
+
+function resetTimer() {
+    hr = 0;
+    min = 0;
+    sec = 0;
+    document.getElementById('stopwatch').innerHTML = '00:00:00';
 }
