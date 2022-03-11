@@ -20,6 +20,14 @@ let selectedGenre = "not selected";
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    $.ajax({
+        url : "/getAllTasks",
+        type: "GET",
+         success: function (result) {
+            console.log(result);
+            TaskArray = JSON.parse(result);
+        }
+    });
     createList();
 
 // add button events ************************************************************************
@@ -84,6 +92,19 @@ document.getElementById("buttonAdd").addEventListener("click", function () {
         document.location.href = "index.html#tasks";
     });
 
+    document.getElementById("buttonSortTask").addEventListener("click", function () {
+        RecordsArray.sort(dynamicSort("taskName"));
+        console.log("BtnSortTask Sorted = " , RecordsArray);
+        createRecordsList();  //createList();
+        document.location.href = "index.html#history";
+    });
+    document.getElementById("buttonSortTime1").addEventListener("click", function () {
+        RecordsArray.sort((a,b) => a["taskEstimatedTime"] - b["taskEstimatedTime"]);
+        createRecordsList();
+        document.location.href = "index.html#history";
+    });
+
+   
 /*    document.getElementById("buttonSubsetComedy").addEventListener("click", function () {
        
         createListSubset("Comedy");  // recreate li list after removing one

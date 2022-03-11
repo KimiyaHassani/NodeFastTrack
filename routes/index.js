@@ -15,6 +15,7 @@ TaskArray.push(new TaskObject("Do Homework", 20));
 TaskArray.push(new TaskObject("Feed the cat", 60));
 TaskArray.push(new TaskObject("Clean the kitchen", 25));
 
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -22,7 +23,8 @@ router.get('/', function(req, res, next) {
 
 /* GET all Movie data */
 router.get('/getAllTasks', function(req, res) {
-  res.status(200).json(TaskArray);
+  console.log(TaskArray);
+  res.json(JSON.stringify(TaskArray));
 });
 
 /* Add one new Task */

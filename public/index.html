@@ -17,7 +17,7 @@
   <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> 
   <script src="javascripts/index.js"></script>
   <link rel="stylesheet" type="text/css" href="css/index.css">
-
+  <link rel="icon" type="imge/x-icon" href="images/favicon.ico">
 </head>
 
 <body>
@@ -27,6 +27,10 @@
 
     <!--   page header -->
     <div data-role="header" data-theme='a'>
+      <div>
+        <a href="#Add" data-icon ="action"></a>
+        <a href="#Delete" data-icon="edit"></a>
+      </div>
       <div class="newFont">Fast Track!</div>
       <div data-role="navbar" data-theme='a' id="nav_bar">
         <ul>
@@ -131,7 +135,7 @@
       <div id="divTaskList"></div>
       <input type="button" value="Sort By Time Created" id="buttonSortTime" data-inline="true" />
       <input type="button" value="Sort By Alphabetical" id="buttonSortAlphabetical" data-inline="true" />
-      <input type="button" value="Edit Task" id="buttonEditTask" data-inline="true" />
+      <!-- <input type="button" value="Edit Task" id="buttonEditTask" data-inline="true" /> -->
     </div>
 
 
@@ -210,6 +214,8 @@
         <h2 id="currentTaskLabel">You are not tracking any tasks</h2>
         <h2>00:00:00</h2>
       </div>
+      
+
 
       <input type="button" value="Start" id="start" />
       <input type="button" value="Pause" id="pause"/>
@@ -245,8 +251,8 @@
     <div data-role="content" data-theme='a'>
       <div class="Roboto"><h2>Here is a record of your tasks</h></div>
       <div id="divRecordsList"></div>
-      <input type="button" value="Sort by task" id="buttonSubsetComedy" data-inline="true" />
-      <input type="button" value="Sort by date" id="buttonSubsetDrama" data-inline="true" />
+      <input type="button" value="Sort by task" id="buttonSortTask" data-inline="true" />
+      <input type="button" value="Sort by time" id="buttonSortTime1" data-inline="true" />
     </div>
   
   
